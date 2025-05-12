@@ -10,6 +10,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from import_data import import_data
+from import_data import clean_text
 
 
 def split_data():
@@ -110,6 +111,7 @@ def fetch_model(vocab_size = 10000, max_length = 300, embedding_dim = 128):
 def predict(data):
     model = fetch_model()
 
+    # data = clean_text(data)
     tokenizer = create_tokenizer()
     pad_data = tokenize_data(tokenizer, data)
 
