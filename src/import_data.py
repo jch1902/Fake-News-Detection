@@ -19,15 +19,15 @@ def import_data():
     output_path = '../cleaned_data/final_labeled_fulldata.csv'
     if os.path.exists(output_path):
         print(output_path, "already exists!")
-        return output_path
+        df = pd.read_csv(output_path)
+        df['text'] = df['text'].apply(clean_text)
+        return df
     else:
         # Combining true and false datasets
         true_df = pd.read_csv('../True.csv')
         false_df = pd.read_csv('../Fake.csv')
         
         true_df["fake_news_flag"] = 0
-
-        true_df['text'] = true_df['text'].apply(clean_text)
         false_df["fake_news_flag"] = 1
 
         combined_df = pd.concat([true_df, false_df], ignore_index=True)
@@ -37,7 +37,6 @@ def import_data():
 
         big_df.drop(columns=["Unnamed: 0","label"], inplace= True)
         big_df = big_df.dropna()
-        big_df['text'] = big_df['text'].apply(clean_text)
         big_df.head()
 
         combined_df.drop(columns=['date','subject'], inplace= True)
@@ -82,4 +81,6 @@ def import_data():
 
         combined_df['dominant_topic'] = dominant_topic
         combined_df['topic_label'] = combined_df['dominant_topic'].map(topic_label_map)
+        combined_df.to_csv(output_path, index = False)
+        combined_df['text'] = combined_df['text'].apply(clean_text)
         return combined_df
