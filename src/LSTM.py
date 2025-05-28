@@ -108,12 +108,20 @@ def fetch_model(vocab_size = 10000, max_length = 300, embedding_dim = 128):
 
     return model
 
-def predict(data):
-    model = fetch_model()
+def predict(data, model = None):
 
-    # data = clean_text(data)
+    if model == None:
+        model = fetch_model()
+
+
+
+    data = clean_text(data)
+    dataDF = pd.DataFrame()
+    dataDF["text"] = [data]
+
+
     tokenizer = create_tokenizer()
-    pad_data = tokenize_data(tokenizer, data)
+    pad_data = tokenize_data(tokenizer, dataDF["text"])
 
     prediction_probs = model.predict(pad_data)
     predictions = (prediction_probs > 0.5).astype(int).flatten()
