@@ -37,3 +37,27 @@ jobs:
     # - name: Test with pytest
     #   run: |
     #     pytest
+  deploy:
+    needs: build
+
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Fake News Detection
+        if: github.event_name == 'push'  # deploy only on push
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5
+        with:
+          artifact_name: web-build-artifact
+    
+    
