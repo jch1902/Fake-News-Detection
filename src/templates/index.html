@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fake News Detector</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class = "header-container">
+        <a href="/" class="home-link">
+            <img class="web-logo" src = "{{ url_for('static', filename='Layers.png') }}">
+            <div class="web-title">
+                <h1>Fake News Detection</h1>
+            </div>
+        </a>
+    </div>
+
+    <div class="empty-place-holder"></div>
+    
+    <div class="text_form_container">
+        <h2>Analyze Text</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <textarea class="form_text" name="news" rows="8" placeholder="Insert news article here..." required>{{ request.form['news'] if request.method == 'POST' else '' }}</textarea>
+            </div>
+            <div class="button-div">
+                <button type="submit" class="analyze-button">Analyze</button>
+            </div>
+        </form>
+
+        {% if prediction %}
+            <div class="alert mt-4 {{ 'alert-success' if 'REAL' in prediction else 'alert-danger' }}">
+                <strong>Result:</strong> {{ prediction }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
